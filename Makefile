@@ -1,27 +1,33 @@
-FLAG = -Wall -Wextra -Werror
-
 NAME = minishell
 
-SRC = mini.c \
+SRC = *.c
 
-OBJ = $(SRC:.c=.o)
+OBJ = *.o
+
+FLAGS = -Wall -Werror -Wextra
+
+LIB = ./libft/libft.a
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	gcc  -o  $(NAME) $(FLAG) $(OBJ) get_next_line/get_next_line.c libft/libft.a 
-	echo "$(NAME) created"
+$(NAME):
+	@make -C libft/ libft.a
+	gcc $(FLAGS) -c $(SRC) -g
+	gcc $(FLAGS) $(OBJ) $(LIB) -o $(NAME)
 
-$(OBJ): %.o: %.c
-	gcc -c $< -o $@
-	echo "Objects created"
+libft:
+	make -C libft/ libft.a
 
 clean:
-	rm -rf *.o
-	echo "Objects deleted"
+	make -C libft/ clean
+	rm -fr $(OBJ)
 
 fclean: clean
-	rm -rf $(NAME)
-	echo "$(NAME) Deleted"
+	make -C libft/ fclean
+	rm -fr $(NAME)
 
 re: fclean all
+
+
+
+
