@@ -1,31 +1,27 @@
+FLAG = -Wall -Wextra -Werror
+
 NAME = minishell
-FLAGS = -Wall -Werror -Wextra
-LIB = ./libft/libft.a
 
-SRC = ./sources/main.c ./sources/parameter_search.c ./sources/ft_strarrrealloc.c \
-		./sources/ft_setenv.c ./sources/unsetenv.c ./sources/print_error.c ./sources/ft_cd.c \
-		./sources/parser.c ./sources/expand.c ./sources/ft_echo.c ./sources/access_control.c
+SRC = main.c ft_split.c ft_execute.c\
 
-OBJ = main.o parameter_search.o ft_strarrrealloc.o \
-		ft_setenv.o unsetenv.o print_error.o ft_cd.o \
-		parser.o expand.o ft_echo.o access_control.o
+OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
-$(NAME):
-	@make -C libft/ libft.a
-	gcc $(FLAGS) -c $(SRC) -g
-	gcc $(FLAGS) $(OBJ) $(LIB) -o $(NAME)
+$(NAME): $(OBJ)
+	gcc  -o  $(NAME) $(FLAG) $(OBJ) get_next_line/get_next_line.c libft/libft.a 
+	echo "$(NAME) created"
 
-libft:
-	make -C libft/ libft.a
+$(OBJ): %.o: %.c
+	gcc -c $< -o $@
+	echo "Objects created"
 
 clean:
-	make -C libft/ clean
-	rm -fr $(OBJ)
+	rm -rf *.o
+	echo "Objects deleted"
 
 fclean: clean
-	make -C libft/ fclean
-	rm -fr $(NAME)
+	rm -rf $(NAME)
+	echo "$(NAME) Deleted"
 
 re: fclean all
